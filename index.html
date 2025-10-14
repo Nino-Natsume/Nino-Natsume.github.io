@@ -1,152 +1,220 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>次元星域 — 一个简易的二次元小站</title>
-  <meta name="description" content="次元星域——一个简易的二次元小站">
-  <meta name="author" content="Natsume">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
+  <meta name="description" content="次元星域——一个简易的二次元小站" />
+  <meta name="author" content="Natsume" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root{
-      /* 樱色 - 紫色 主题 */
-      --bg1:#120218; /* 深紫（页面顶部） */
-      --bg2:#2a0836; /* 深樱紫（页面底部） */
-      --accent1:#ff9ccf; /* 樱色 */
-      --accent2:#b388ff; /* 紫色 */
-      --accent3:#ffd9ec; /* 淡粉 */
-      --text:#fff8ff; /* 页面文字（亮） */
-      --card-bg: rgba(255,255,255,0.02);
+      /* Sakura (樱) theme */
+      --sakura-100: #fff2f7; /* very light */
+      --sakura-200: #ffd9ea; 
+      --sakura-300: #ffc1e0;
+      --sakura-400: #ff9ccf; /* main highlight */
+      --sakura-500: #ff78c0; /* deeper sakura for text */
+      --violet: #b388ff;
+      --accent: linear-gradient(90deg,var(--sakura-400),var(--violet));
+      --bg: linear-gradient(180deg,#ffeef6 0%, #ffd9ea 30%, #ffd0e6 60%, #ffd0f0 100%);
+      --card-bg: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.08);
+      --shadow: rgba(170,60,110,0.14);
+      --text: #7a0b3a; /* deeper sakura text color */
     }
-    *{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:'Nunito',system-ui,Segoe UI,Roboto,'Microsoft Yahei',sans-serif;color:var(--text);background:linear-gradient(180deg,var(--bg1),var(--bg2));overflow:hidden}
 
-    /* glowing blobs with sakura/purple hues */
-    .animated-bg{position:fixed;inset:-10%;z-index:0;pointer-events:none}
-    .blob{position:absolute;border-radius:50%;filter:blur(80px);mix-blend-mode:screen;opacity:0.95}
-    .b1{width:900px;height:420px;left:-8%;top:-12%;background:radial-gradient(circle at 30% 30%, rgba(255,156,207,0.18), rgba(179,136,255,0.06));animation:drift1 22s linear infinite}
-    .b2{width:640px;height:380px;right:-6%;bottom:-8%;background:radial-gradient(circle at 70% 60%, rgba(179,136,255,0.14), rgba(255,156,207,0.05));animation:drift2 28s linear infinite}
-    @keyframes drift1{0%{transform:translate(0,0)}50%{transform:translate(-40px,20px)}100%{transform:translate(0,0)}}
-    @keyframes drift2{0%{transform:translate(0,0)}50%{transform:translate(30px,-18px)}100%{transform:translate(0,0)}}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Noto Sans JP', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Microsoft Yahei', sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow:hidden;
+    }
 
-    .wrap{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px;z-index:1}
-    .card{width:100%;max-width:1100px;background:linear-gradient(180deg,var(--card-bg), rgba(255,255,255,0.01));border-radius:18px;box-shadow: 0 14px 60px rgba(6,3,18,0.6);border:1px solid rgba(255,255,255,0.03);display:grid;grid-template-columns:1fr 92px 1fr;overflow:hidden;position:relative;padding:42px;backdrop-filter: blur(6px)}
+    /* soft vignette + anime cel-shading light */
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(60% 60% at 30% 25%, rgba(255,255,255,0.06), transparent 30%), linear-gradient(180deg, rgba(255,255,255,0.02), transparent 40%);mix-blend-mode:screen}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(60% 40% at 70% 80%, rgba(220,150,200,0.06), transparent 30%), linear-gradient(180deg, rgba(0,0,0,0.02), transparent 70%)}
 
-    /* Left: centered title + description (title居中于描述) */
-    .left{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:8px 28px;text-align:center}
-    .site-title{font-weight:900;line-height:0.92;letter-spacing:2px;text-shadow:0 10px 40px rgba(179,136,255,0.08);color:transparent;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text}
-    .site-title .line1{display:block;font-size:clamp(48px,8vw,86px)}
-    .site-title .line2{display:block;font-size:clamp(48px,8vw,86px)}
+    .wrap{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px}
 
-    .site-desc{font-size:15px;color:rgba(255,217,236,0.96);margin-top:12px;max-width:80%}
+    .card{
+      width:100%;max-width:1100px;padding:40px;border-radius:20px;background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));box-shadow: 0 20px 60px var(--shadow);border:1px solid rgba(255,255,255,0.06);display:grid;grid-template-columns:1fr 120px 1fr;align-items:center;position:relative;overflow:visible;
+    }
 
-    /* separator rail */
-    .separator{display:flex;align-items:center;justify-content:center;position:relative;padding:0 8px}
-    .rail{width:10px;height:72%;position:relative;border-radius:14px;overflow:visible}
-    .rail:before{content:"";position:absolute;left:50%;transform:translateX(-50%);width:100%;height:100%;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.05));}
-    .rail .glow{position:absolute;left:50%;transform:translateX(-50%);width:26px;height:220%;border-radius:16px;top:-60%;background:linear-gradient(180deg,var(--accent1),var(--accent2));mix-blend-mode:screen;filter:blur(14px);opacity:0.66;animation:glide 4s linear infinite}
-    .rail .core{position:absolute;left:50%;transform:translateX(-50%);width:3px;height:100%;border-radius:6px;background:linear-gradient(180deg,var(--accent3),rgba(255,255,255,0.06));}
-    @keyframes glide{0%{transform:translate(-50%, -140%)}50%{transform:translate(-50%, 30%)}100%{transform:translate(-50%, -140%)}}
+    /* left: centered title + description */
+    .left{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px}
+    .site-title{font-weight:900;line-height:0.9;letter-spacing:1px;color:var(--sakura-500);position:relative;padding:8px}
+    .site-title .line1{display:block;font-size:clamp(44px,8vw,92px)}
+    .site-title .line2{display:block;font-size:clamp(44px,8vw,92px)}
+    .site-desc{margin-top:12px;font-size:15px;color:rgba(122,11,58,0.85);}
 
-    /* Right: prominent animated icon button with stronger visible edge */
-    .right{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 28px}
-    .big-btn{width:120px;height:120px;border-radius:20px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:3px solid rgba(255,255,255,0.06);cursor:pointer;text-decoration:none;position:relative;overflow:visible;box-shadow:0 18px 70px rgba(179,136,255,0.10);transition:transform .18s ease, box-shadow .18s ease}
-    .big-btn:focus{outline:4px solid rgba(179,136,255,0.16);outline-offset:6px}
-    .big-btn:hover{transform:translateY(-10px) scale(1.04);box-shadow:0 36px 120px rgba(179,136,255,0.18)}
+    /* Title dynamics: load animation (soft glow sweep + float) */
+    .site-title.load{animation:float 5.6s ease-in-out infinite}
+    .site-title.load::after{content:'';position:absolute;left:-30%;top:10%;width:60%;height:80%;background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.18), rgba(255,255,255,0.06));transform:skewX(-12deg);opacity:0.06;animation:shine 3.2s linear infinite}
+    @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+    @keyframes shine{0%{transform:translateX(-120%)}50%{transform:translateX(120%)}100%{transform:translateX(-120%)}}
 
-    /* accent rim using pseudo elements (more pronounced) */
-    .big-btn:before{content:"";position:absolute;inset:-10px;border-radius:28px;background:linear-gradient(90deg,var(--accent1),var(--accent2));filter:blur(14px);opacity:0.16;transition:opacity .28s}
-    .big-btn:hover:before{opacity:0.32}
-    .big-btn:after{content:"";position:absolute;inset:6px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);pointer-events:none}
+    /* hover animation: stronger neon outline + subtle jitter */
+    .site-title.hover{animation:none;filter:drop-shadow(0 0 20px rgba(255,140,195,0.35));transform-origin:center}
+    .site-title.hover .line1,.site-title.hover .line2{animation:jitter 0.9s ease-in-out 1}
+    @keyframes jitter{0%{transform:translateY(0) rotate(0)}30%{transform:translateY(-6px) rotate(-0.6deg)}60%{transform:translateY(2px) rotate(0.5deg)}100%{transform:translateY(0) rotate(0)}}
 
-    /* animated icon inside */
-    .big-icon{width:64px;height:64px;position:relative;display:block}
-    .big-icon .petal{position:absolute;left:50%;top:50%;width:30px;height:30px;background:linear-gradient(90deg,var(--accent1),var(--accent2));border-radius:8px;transform-origin:50% 60%;opacity:0.98}
-    .big-icon .p1{transform:translate(-50%,-110%) rotate(0)}
-    .big-icon .p2{transform:translate(10%,-10%) rotate(72deg)}
-    .big-icon .p3{transform:translate(40%,30%) rotate(144deg)}
-    .big-icon .p4{transform:translate(-40%,30%) rotate(216deg)}
-    .big-icon .p5{transform:translate(-80%,-10%) rotate(288deg)}
-    .big-icon .center{position:absolute;left:50%;top:50%;width:20px;height:20px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 30% 30%, var(--accent3), rgba(255,255,255,0.06));box-shadow:0 8px 32px rgba(179,136,255,0.16)}
+    /* center separator: slim sakura bar with petals + DNA-like helix */
+    .separator{display:flex;align-items:center;justify-content:center;position:relative;padding:0 12px}
+    .rail{width:10px;height:78%;border-radius:12px;position:relative;display:flex;align-items:center;justify-content:center}
+    .rail .core{width:4px;height:86%;border-radius:6px;background:linear-gradient(180deg,var(--sakura-300),var(--sakura-400));box-shadow:0 0 12px rgba(255,156,207,0.18) inset}
 
-    /* petal animation (gentle orbit) */
-    .big-icon{animation:iconScale 3.6s ease-in-out infinite}
-    .big-icon .petal{animation:petalRotate 6s linear infinite}
-    .big-icon .p1{animation-delay:0s}.big-icon .p2{animation-delay:0.08s}.big-icon .p3{animation-delay:0.16s}.big-icon .p4{animation-delay:0.24s}.big-icon .p5{animation-delay:0.32s}
-    @keyframes petalRotate{0%{transform:translateY(-50%) rotate(0)}50%{transform:translateY(-60%) rotate(10deg)}100%{transform:translateY(-50%) rotate(0)}}
-    @keyframes iconScale{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+    /* helix SVG overlay (DNA-like) with animated stroke-dashoffset for movement */
+    .helix{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:260px;height:260%;pointer-events:none}
+    .helix path{fill:none;stroke-linecap:round;stroke-width:2.2;opacity:0.95;stroke-linejoin:round}
 
-    /* pulse rim */
-    .pulse{position:absolute;inset:-20px;border-radius:30px;pointer-events:none;opacity:0.28;animation:pulse 2.6s ease-out infinite;background:linear-gradient(90deg,var(--accent1),var(--accent2))}
-    @keyframes pulse{0%{transform:scale(.95);opacity:0.28}70%{transform:scale(1.35);opacity:0}100%{transform:scale(.95);opacity:0}}
+    /* petals floating around */
+    .petals{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+    .petal{position:absolute;width:18px;height:18px;background:radial-gradient(circle at 30% 30%, #fff7, var(--sakura-400));border-radius:50% 20% 50% 20%;opacity:0.95;transform-origin:center;filter:drop-shadow(0 6px 12px rgba(170,60,110,0.12));animation:petalFall linear infinite}
+    @keyframes petalFall{0%{transform:translateY(-10vh) rotate(0) translateX(0);opacity:0}10%{opacity:1}100%{transform:translateY(120vh) rotate(520deg) translateX(120px);opacity:0}}
 
-    .brand{position:absolute;left:18px;bottom:18px;font-size:12px;color:rgba(255,217,236,0.45)}
+    /* right: big CTA with anime-esque edge and soft rim light */
+    .right{display:flex;align-items:center;justify-content:center;padding:18px}
+    .cta{position:relative;display:inline-flex;align-items:center;gap:14px;justify-content:center;padding:18px 26px;border-radius:18px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border:3px solid rgba(255,255,255,0.06);box-shadow:0 22px 80px rgba(179,100,170,0.10);cursor:pointer;text-decoration:none;color:var(--text);font-weight:900}
+    .cta .label{font-size:18px;color:var(--text)}
+    .cta .icon{width:56px;height:56px;border-radius:12px;background:linear-gradient(90deg,var(--sakura-400),var(--violet));box-shadow:0 8px 26px rgba(179,100,170,0.12)}
 
-    @media (max-width:880px){.card{grid-template-columns:1fr;gap:18px;padding:28px}.separator{display:none}.left{padding-bottom:4px}.right{align-items:flex-start}.site-title .line1,.site-title .line2{font-size:clamp(36px,9vw,56px)}}
+    /* animated rim glow */
+    .cta::before{content:'';position:absolute;inset:-12px;border-radius:24px;background:linear-gradient(90deg,var(--sakura-400),var(--violet));filter:blur(18px);opacity:0.12;transition:opacity .2s}
+    .cta:hover::before{opacity:0.32}
+
+    /* shimmer on hover */
+    .cta .shimmer{position:absolute;left:-35%;top:0;width:170%;height:100%;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.3), rgba(255,255,255,0.02));transform:translateX(-100%);opacity:0.14;pointer-events:none;transition:transform .8s}
+    .cta:hover .shimmer{transform:translateX(0);opacity:0.28}
+
+    /* soft rim for anime cell shading */
+    .card::before{content:'';position:absolute;inset:-6px;border-radius:22px;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));pointer-events:none}
+
+    /* responsive */
+    @media (max-width:900px){.card{grid-template-columns:1fr;gap:18px;padding:28px}.helix{width:160px;height:180%}.cta{width:220px}}
   </style>
 </head>
 <body>
-  <div class="animated-bg" aria-hidden="true">
-    <div class="blob b1" aria-hidden="true"></div>
-    <div class="blob b2" aria-hidden="true"></div>
-  </div>
 
   <div class="wrap">
     <div class="card" role="main" aria-labelledby="main-title">
+
       <div class="left">
-        <!-- 大标题位于网页描述居中位置（标题与描述在同一中轴并居中） -->
         <h1 id="main-title" class="site-title"><span class="line1">次元</span><span class="line2">星域</span></h1>
         <div class="site-desc">次元星域——一个简易的二次元小站</div>
       </div>
 
       <div class="separator" aria-hidden="true">
         <div class="rail" role="presentation">
-          <div class="glow"></div>
-          <div class="core"></div>
+          <div class="core" aria-hidden="true"></div>
+
+          <svg class="helix" viewBox="0 0 220 880" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <defs>
+              <linearGradient id="stroke1" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#ff9ccf" />
+                <stop offset="50%" stop-color="#b388ff" />
+                <stop offset="100%" stop-color="#ff9ccf" />
+              </linearGradient>
+              <linearGradient id="stroke2" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#ffd9ec" />
+                <stop offset="100%" stop-color="#ff9ccf" />
+              </linearGradient>
+            </defs>
+
+            <path class="h1" d="M110,20 C70,90 150,160 110,230 C70,300 150,370 110,440 C70,510 150,580 110,650" stroke="url(#stroke1)" stroke-linecap="round" stroke-width="2.6" stroke-dasharray="6 10" />
+            <path class="h2" d="M110,40 C150,110 70,180 110,250 C150,320 70,390 110,460 C150,530 70,600 110,670" stroke="url(#stroke2)" stroke-linecap="round" stroke-width="2.2" stroke-dasharray="6 8" opacity="0.95" />
+            <path class="h3" d="M110,0 C60,70 160,140 110,210 C60,280 160,350 110,420 C60,490 160,560 110,630" stroke="url(#stroke1)" stroke-linecap="round" stroke-width="1.8" stroke-dasharray="2 8" opacity="0.85" />
+          </svg>
+
         </div>
       </div>
 
       <div class="right">
-        <a class="big-btn" href="https://natsume.xin" target="_blank" rel="noopener noreferrer" aria-label="前往个人网站">
-          <div class="big-icon" aria-hidden="true">
-            <div class="petal p1"></div>
-            <div class="petal p2"></div>
-            <div class="petal p3"></div>
-            <div class="petal p4"></div>
-            <div class="petal p5"></div>
-            <div class="center"></div>
-          </div>
-          <div class="pulse" aria-hidden="true"></div>
+        <a class="cta" href="https://natsume.xin" target="_blank" rel="noopener noreferrer" aria-label="前往个人网站">
+          <span class="icon" aria-hidden="true"></span>
+          <span class="label">个人网站</span>
+          <span class="shimmer" aria-hidden="true"></span>
         </a>
       </div>
 
-      <div class="brand">© 次元星域</div>
+      <!-- floating petals layer -->
+      <div class="petals" aria-hidden="true"></div>
+
     </div>
   </div>
 
   <script>
-    // parallax and color tint on mouse move
+    // Add interactive behaviors
     (function(){
       const title = document.querySelector('.site-title');
-      const glow = document.querySelector('.rail .glow');
-      document.addEventListener('mousemove', e=>{
-        const cx = (e.clientX - window.innerWidth/2)/ (window.innerWidth/2);
-        const cy = (e.clientY - window.innerHeight/2)/ (window.innerHeight/2);
-        title.style.transform = `translateX(${cx*8}px) translateY(${cy*6}px)`;
-        if(glow){
-          const r1 = Math.round(255 - cx*10);
-          const g1 = Math.round(156 + cy*20);
-          const b1 = Math.round(207 + cx*10);
-          glow.style.background = `linear-gradient(180deg, rgba(${r1},${g1},${b1},0.95), rgba(179,136,255,0.95))`;
-        }
+      // initial load style
+      title.classList.add('load');
+      // after a short time remove load overlay but keep float
+      setTimeout(()=>{ title.classList.remove('load'); title.classList.add('load'); }, 1600);
+
+      // hover behavior differs from load
+      title.addEventListener('mouseenter', ()=>{
+        title.classList.add('hover');
+      });
+      title.addEventListener('mouseleave', ()=>{
+        title.classList.remove('hover');
       });
 
-      // initial entrance animation
-      window.addEventListener('load', ()=>{
-        document.querySelectorAll('.card, .site-title, .big-btn').forEach((el,i)=>{
-          el.style.opacity=0;el.style.transform+=' translateY(10px)';
-          setTimeout(()=>{el.style.transition='all .8s cubic-bezier(.2,.9,.2,1)';el.style.opacity=1;el.style.transform=el.style.transform.replace(' translateY(10px)','')}, 140*i);
+      // Generate petals
+      const petalsLayer = document.querySelector('.petals');
+      const petalsCount = 22;
+      for(let i=0;i<petalsCount;i++){
+        const p = document.createElement('div');
+        p.className='petal';
+        const left = Math.random()*100;
+        const delay = Math.random()*6;
+        const dur = 6 + Math.random()*8;
+        const size = 8 + Math.random()*18;
+        p.style.width = p.style.height = size + 'px';
+        p.style.left = left + '%';
+        p.style.top = (-10 - Math.random()*30) + '%';
+        p.style.opacity = (0.6 + Math.random()*0.4).toFixed(2);
+        p.style.transform = `rotate(${Math.random()*360}deg)`;
+        p.style.animationDuration = dur + 's';
+        p.style.animationDelay = delay + 's';
+        p.style.filter = `drop-shadow(0 ${6 + Math.random()*8}px ${6 + Math.random()*10}px rgba(170,60,110,0.08))`;
+        petalsLayer.appendChild(p);
+      }
+
+      // Animate helix strokes by shifting dashoffset using requestAnimationFrame
+      const paths = document.querySelectorAll('.helix path');
+      const speeds = [0.6, 0.45, 0.3].map(s=>s * (0.8 + Math.random()*0.6));
+      const offsets = [0,0,0];
+      function tick(){
+        paths.forEach((p,i)=>{
+          offsets[i] = (offsets[i] + speeds[i]) % 1000;
+          p.style.strokeDashoffset = offsets[i];
         });
+        requestAnimationFrame(tick);
+      }
+      tick();
+
+      // subtle parallax on mouse move for title and card
+      const card = document.querySelector('.card');
+      document.addEventListener('mousemove', (e)=>{
+        const cx = (e.clientX - window.innerWidth/2)/(window.innerWidth/2);
+        const cy = (e.clientY - window.innerHeight/2)/(window.innerHeight/2);
+        title.style.transform = `translate(${cx*8}px, ${cy*6}px)`;
+        card.style.boxShadow = `0 ${20 + cy*6}px ${60 + Math.abs(cx)*20}px rgba(170,60,110,0.12)`;
       });
+
+      // CTA shimmer & click ripple
+      const cta = document.querySelector('.cta');
+      cta.addEventListener('click', (e)=>{
+        // create quick flash and slight scale
+        cta.animate([{transform:'scale(1)'},{transform:'scale(0.98)'},{transform:'scale(1)'}],{duration:320,easing:'ease-out'});
+      });
+
     })();
   </script>
 </body>
