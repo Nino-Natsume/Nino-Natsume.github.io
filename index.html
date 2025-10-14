@@ -9,95 +9,123 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg1:#071028;--bg2:#081226;--accent1:#ff7bd2;--accent2:#6a9bff;--text:#eaf2ff;
+      --bg1:#050512; --bg2:#0b0620;
+      --accent1:#ff9ccf; /* 樱色 */
+      --accent2:#b388ff; /* 紫色 */
+      --accent3:#ffd9ec; /* 淡粉 */
+      --text:#fff6ff;
+      --card-bg: rgba(255,255,255,0.02);
     }
     *{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:'Nunito',system-ui,Segoe UI,Roboto,'Microsoft Yahei',sans-serif;color:var(--text);background:linear-gradient(180deg,var(--bg1),var(--bg2));overflow:hidden}
 
-    /* animated background gradient */
-    .animated-bg{position:fixed;inset:-20%;z-index:0;background:radial-gradient(circle at 10% 20%, rgba(106,155,255,0.08), transparent 6%),radial-gradient(circle at 80% 80%, rgba(255,123,210,0.06), transparent 8%);animation:bgDrift 18s linear infinite;mix-blend-mode:screen;pointer-events:none}
-    @keyframes bgDrift{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(-40px,20px,0)}100%{transform:translate3d(0,0,0)}}
+    /* drifting luminous blobs */
+    .animated-bg{position:fixed;inset:-10%;z-index:0;pointer-events:none}
+    .blob{position:absolute;border-radius:50%;filter:blur(60px);mix-blend-mode:screen;opacity:0.9}
+    .b1{width:800px;height:400px;left:-8%;top:-6%;background:radial-gradient(circle at 30% 30%, rgba(255,156,207,0.16), rgba(179,136,255,0.06));animation:drift1 20s linear infinite}
+    .b2{width:600px;height:360px;right:-6%;bottom:-12%;background:radial-gradient(circle at 70% 60%, rgba(179,136,255,0.12), rgba(255,156,207,0.05));animation:drift2 26s linear infinite}
+    @keyframes drift1{0%{transform:translate(0,0)}50%{transform:translate(-40px,20px)}100%{transform:translate(0,0)}}
+    @keyframes drift2{0%{transform:translate(0,0)}50%{transform:translate(30px,-18px)}100%{transform:translate(0,0)}}
 
     .wrap{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px;z-index:1}
-    .card{width:100%;max-width:1100px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:18px;box-shadow: 0 10px 40px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03);display:grid;grid-template-columns:1fr 120px 1fr;overflow:hidden;position:relative;padding:42px;backdrop-filter: blur(6px)}
+    .card{width:100%;max-width:1100px;background:linear-gradient(180deg,var(--card-bg), rgba(255,255,255,0.01));border-radius:18px;box-shadow: 0 12px 48px rgba(2,3,10,0.6);border:1px solid rgba(255,255,255,0.03);display:grid;grid-template-columns:1fr 92px 1fr;overflow:hidden;position:relative;padding:42px;backdrop-filter: blur(6px)}
 
-    /* Left title only */
-    .left{display:flex;flex-direction:column;justify-content:center;padding:12px 28px}
-    .site-title{font-size:clamp(56px,10vw,96px);line-height:0.92;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 8px 40px rgba(106,155,255,0.06);animation:floatTitle 5s ease-in-out infinite,neonFlicker 6s linear infinite;transform-origin:left center}
-    @keyframes floatTitle{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
-    @keyframes neonFlicker{0%,100%{filter:drop-shadow(0 0 18px rgba(106,155,255,0.25))}40%{filter:drop-shadow(0 0 28px rgba(255,123,210,0.35))}60%{filter:drop-shadow(0 0 6px rgba(106,155,255,0.08))}}
+    /* Left: title + small description */
+    .left{display:flex;flex-direction:column;justify-content:center;padding:8px 28px}
+    .site-title{font-weight:900;line-height:0.92;letter-spacing:2px;text-shadow:0 8px 40px rgba(179,136,255,0.06);color:transparent;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text}
+    .site-title .line1{display:block;font-size:clamp(44px,7vw,72px)}
+    .site-title .line2{display:block;font-size:clamp(44px,7vw,72px)}
+    /* slightly smaller than title but visible */
+    .site-desc{font-size:14px;color:rgba(255,217,236,0.92);margin-top:12px;max-width:70%}
 
-    /* center separator with richer animated gradient lines */
+    /* separator rail */
     .separator{display:flex;align-items:center;justify-content:center;position:relative;padding:0 8px}
-    .separator .rail{width:6px;height:72%;position:relative;border-radius:8px;overflow:visible}
-    .rail:before,.rail:after{content:"";position:absolute;left:50%;transform:translateX(-50%);width:100%;height:100%;border-radius:8px;background:linear-gradient(180deg, transparent 8%, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.03) 75%, transparent 92%);}
-    .rail .glow{position:absolute;left:50%;transform:translateX(-50%);width:14px;height:200%;border-radius:10px;top:-40%;background:linear-gradient(180deg,var(--accent1),var(--accent2));mix-blend-mode:screen;filter:blur(10px);opacity:0.55;animation:glide 4s linear infinite}
-    .rail .stripe{position:absolute;left:50%;transform:translateX(-50%);width:3px;height:100%;border-radius:6px;background:linear-gradient(180deg,#fff0, rgba(255,255,255,0.12), #fff0);opacity:0.85}
-    @keyframes glide{0%{transform:translate(-50%, -120%) }50%{transform:translate(-50%, 20%)}100%{transform:translate(-50%, -120%)}}
+    .rail{width:8px;height:72%;position:relative;border-radius:12px;overflow:visible}
+    .rail:before{content:"";position:absolute;left:50%;transform:translateX(-50%);width:100%;height:100%;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.05));}
+    .rail .glow{position:absolute;left:50%;transform:translateX(-50%);width:22px;height:220%;border-radius:16px;top:-60%;background:linear-gradient(180deg,var(--accent1),var(--accent2));mix-blend-mode:screen;filter:blur(14px);opacity:0.6;animation:glide 4s linear infinite}
+    .rail .core{position:absolute;left:50%;transform:translateX(-50%);width:2px;height:100%;border-radius:6px;background:linear-gradient(180deg,var(--accent3),rgba(255,255,255,0.06));}
+    @keyframes glide{0%{transform:translate(-50%, -130%)}50%{transform:translate(-50%, 30%)}100%{transform:translate(-50%, -130%)}}
 
-    /* Right area: icon-only entry */
-    .right{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 28px}
-    .site-desc{font-size:13px;color:rgba(234,242,255,0.7);margin-bottom:14px;letter-spacing:0.6px}
+    /* Right: prominent animated icon button */
+    .right{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 28px}
 
-    /* CSS-only icon button */
-    .btn{width:64px;height:64px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.06);cursor:pointer;text-decoration:none;position:relative;overflow:visible;box-shadow:0 8px 30px rgba(106,155,255,0.06);transition:transform .18s ease}
-    .btn:hover{transform:translateY(-8px) scale(1.03)}
-    .btn:active{transform:translateY(-2px)}
+    /* large button with visible edge */
+    .big-btn{width:110px;height:110px;border-radius:18px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:2px solid rgba(255,255,255,0.06);cursor:pointer;text-decoration:none;position:relative;overflow:visible;box-shadow:0 12px 40px rgba(179,136,255,0.08);transition:transform .18s ease, box-shadow .18s ease}
+    .big-btn:focus{outline:3px solid rgba(179,136,255,0.14);outline-offset:4px}
+    .big-btn:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 26px 70px rgba(179,136,255,0.14)}
 
-    /* pure CSS icon (star-ish + sparkles) */
-    .icon-css{width:34px;height:34px;position:relative;display:block}
-    .icon-css:before{content:"";position:absolute;left:50%;top:50%;width:18px;height:18px;background:linear-gradient(90deg,var(--accent1),var(--accent2));transform:translate(-50%,-50%) rotate(25deg);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);filter:drop-shadow(0 6px 20px rgba(106,155,255,0.12))}
-    .icon-css:after{content:"";position:absolute;right:-6px;top:-6px;width:8px;height:8px;border-radius:2px;background:rgba(255,255,255,0.9);transform:rotate(25deg);box-shadow:0 0 12px rgba(255,123,210,0.6);opacity:0.9}
-    .btn:before{content:"";position:absolute;inset:0;border-radius:14px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.04));opacity:0;transition:opacity .28s}
-    .btn:hover:before{opacity:1}
+    /* accent rim using pseudo elements */
+    .big-btn:before{content:"";position:absolute;inset:-6px;border-radius:22px;background:linear-gradient(90deg,var(--accent1),var(--accent2));filter:blur(10px);opacity:0.14;transition:opacity .3s}
+    .big-btn:hover:before{opacity:0.28}
+    .big-btn:after{content:"";position:absolute;inset:2px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);pointer-events:none}
 
-    /* icon animation */
-    .icon-css{animation:iconFloat 3.2s ease-in-out infinite,iconSpin 12s linear infinite}
-    @keyframes iconFloat{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
-    @keyframes iconSpin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+    /* animated icon inside (SVG-like using CSS) */
+    .big-icon{width:58px;height:58px;position:relative;display:block}
+    .big-icon .petal{position:absolute;left:50%;top:50%;width:26px;height:26px;background:linear-gradient(90deg,var(--accent1),var(--accent2));border-radius:6px;transform-origin:50% 60%;opacity:0.98}
+    .big-icon .p1{transform:translate(-50%,-110%) rotate(0)}
+    .big-icon .p2{transform:translate(10%,-10%) rotate(72deg)}
+    .big-icon .p3{transform:translate(40%,30%) rotate(144deg)}
+    .big-icon .p4{transform:translate(-40%,30%) rotate(216deg)}
+    .big-icon .p5{transform:translate(-80%,-10%) rotate(288deg)}
+    .big-icon .center{position:absolute;left:50%;top:50%;width:18px;height:18px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 30% 30%, var(--accent3), rgba(255,255,255,0.08));box-shadow:0 6px 24px rgba(179,136,255,0.12)}
 
-    /* extra animated accents */
-    .pulse-ring{position:absolute;inset:-14px;border-radius:18px;pointer-events:none;opacity:0.28;animation:pulse 2.6s ease-out infinite}
-    @keyframes pulse{0%{transform:scale(.9);opacity:0.25}70%{transform:scale(1.25);opacity:0}100%{transform:scale(0.9);opacity:0}}
+    /* petal animation */
+    .big-icon{animation:iconScale 3.6s ease-in-out infinite}
+    .big-icon .petal{animation:petalRotate 6s linear infinite}
+    .big-icon .p1{animation-delay:0s}.big-icon .p2{animation-delay:0.08s}.big-icon .p3{animation-delay:0.16s}.big-icon .p4{animation-delay:0.24s}.big-icon .p5{animation-delay:0.32s}
+    @keyframes petalRotate{0%{transform:translateY(-50%) rotate(0)}50%{transform:translateY(-60%) rotate(8deg)}100%{transform:translateY(-50%) rotate(0)}}
+    @keyframes iconScale{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
 
-    /* shooting stars layer */
-    .shoots{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-    .shoot{position:absolute;width:2px;height:90px;background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.0));top:-20%;left:10%;opacity:0.9;filter:blur(1px);transform:rotate(-25deg);animation:shoot 3.6s linear infinite}
-    .shoot.s2{left:60%;animation-duration:4.8s;animation-delay:1s}
-    .shoot.s3{left:30%;animation-duration:5.6s;animation-delay:2.2s}
-    @keyframes shoot{0%{transform:translateY(-120vh) translateX(0) rotate(-25deg);opacity:0}10%{opacity:1}60%{opacity:0.9}100%{transform:translateY(120vh) translateX(200px) rotate(-25deg);opacity:0}}
+    /* pulse rim */
+    .pulse{position:absolute;inset:-18px;border-radius:26px;pointer-events:none;opacity:0.28;animation:pulse 2.6s ease-out infinite;background:linear-gradient(90deg,var(--accent1),var(--accent2))}
+    @keyframes pulse{0%{transform:scale(.95);opacity:0.28}70%{transform:scale(1.35);opacity:0}100%{transform:scale(.95);opacity:0}}
 
-    .brand{position:absolute;left:18px;bottom:18px;font-size:12px;color:rgba(234,242,255,0.45)}
+    /* shooting sparkles on right */
+    .spark{position:absolute;width:4px;height:4px;border-radius:2px;background:var(--accent3);box-shadow:0 0 10px var(--accent3);opacity:0.95}
 
-    @media (max-width:880px){.card{grid-template-columns:1fr;gap:18px;padding:28px}.separator{display:none}.left{padding-bottom:4px}.right{align-items:flex-start}.site-title{text-align:left}}
+    .brand{position:absolute;left:18px;bottom:18px;font-size:12px;color:rgba(255,217,236,0.45)}
+
+    @media (max-width:880px){.card{grid-template-columns:1fr;gap:18px;padding:28px}.separator{display:none}.left{padding-bottom:4px}.right{align-items:flex-start}.site-title .line1,.site-title .line2{font-size:clamp(36px,9vw,56px)}}
   </style>
 </head>
 <body>
-  <div class="animated-bg" aria-hidden="true"></div>
+  <div class="animated-bg" aria-hidden="true">
+    <div class="blob b1" aria-hidden="true"></div>
+    <div class="blob b2" aria-hidden="true"></div>
+  </div>
+
   <div class="wrap">
     <div class="card" role="main" aria-labelledby="main-title">
       <div class="left">
-        <h1 id="main-title" class="site-title">次元星域</h1>
+        <h1 id="main-title" class="site-title"><span class="line1">次元</span><span class="line2">星域</span></h1>
+        <div class="site-desc">次元星域——一个简易的二次元小站</div>
       </div>
 
       <div class="separator" aria-hidden="true">
         <div class="rail" role="presentation">
           <div class="glow"></div>
-          <div class="stripe"></div>
+          <div class="core"></div>
         </div>
       </div>
 
       <div class="right">
-        <div class="site-desc" aria-hidden="true">次元星域——一个简易的二次元小站</div>
-        <a class="btn" href="https://natsume.xin" target="_blank" rel="noopener noreferrer" aria-label="前往个人网站">
-          <span class="icon-css" aria-hidden="true"></span>
-          <span class="pulse-ring" aria-hidden="true"></span>
+        <a class="big-btn" href="https://natsume.xin" target="_blank" rel="noopener noreferrer" aria-label="前往个人网站">
+          <div class="big-icon" aria-hidden="true">
+            <div class="petal p1"></div>
+            <div class="petal p2"></div>
+            <div class="petal p3"></div>
+            <div class="petal p4"></div>
+            <div class="petal p5"></div>
+            <div class="center"></div>
+          </div>
+          <div class="pulse" aria-hidden="true"></div>
         </a>
-      </div>
 
-      <div class="shoots" aria-hidden="true">
-        <div class="shoot"></div>
-        <div class="shoot s2"></div>
-        <div class="shoot s3"></div>
+        <!-- subtle decorative sparks -->
+        <div style="position:relative;width:100%;height:40px;margin-top:18px;pointer-events:none">
+          <div class="spark" style="left:12%;top:8%;animation:shoot1 3s ease-in-out infinite"></div>
+          <div class="spark" style="left:64%;top:18%;animation:shoot2 4.2s ease-in-out infinite"></div>
+          <div class="spark" style="left:42%;top:6%;animation:shoot3 3.8s ease-in-out infinite"></div>
+        </div>
       </div>
 
       <div class="brand">© 次元星域</div>
@@ -105,26 +133,32 @@
   </div>
 
   <script>
-    // Additional subtle interactivity: title parallax + gentle color shift on mouse
+    // small animations for sparks
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes shoot1{0%{transform:translateY(0) scale(0.9)}50%{transform:translateY(-12px) scale(1.1)}100%{transform:translateY(0) scale(0.9)}}@keyframes shoot2{0%{transform:translateY(0) scale(0.9)}50%{transform:translateY(-18px) scale(1.05)}100%{transform:translateY(0) scale(0.9)}}@keyframes shoot3{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.08)}100%{transform:translateY(0) scale(1)}}`;
+    document.head.appendChild(style);
+
+    // parallax title and interactive color shift
     (function(){
       const title = document.querySelector('.site-title');
-      const card = document.querySelector('.card');
+      const glow = document.querySelector('.rail .glow');
       document.addEventListener('mousemove', e=>{
         const cx = (e.clientX - window.innerWidth/2)/ (window.innerWidth/2);
         const cy = (e.clientY - window.innerHeight/2)/ (window.innerHeight/2);
-        title.style.transform = `translateY(${cy*8}px) translateX(${cx*6}px)`;
-        // tint shift on rail glow
-        const glow = document.querySelector('.rail .glow');
+        title.style.transform = `translateX(${cx*8}px) translateY(${cy*6}px)`;
         if(glow){
-          glow.style.background = `linear-gradient(180deg, rgba(${255},${123+cx*30},${210+cy*30},0.9), rgba(${106+cx*30},${155+cy*20},${255},0.9))`;
+          const r1 = Math.round(255 - cx*10);
+          const g1 = Math.round(156 + cy*20);
+          const b1 = Math.round(207 + cx*10);
+          glow.style.background = `linear-gradient(180deg, rgba(${r1},${g1},${b1},0.95), rgba(179,136,255,0.95))`;
         }
       });
 
-      // small entrance animations
+      // load entrance
       window.addEventListener('load', ()=>{
-        document.querySelectorAll('.card, .site-title, .btn').forEach((el,i)=>{
-          el.style.opacity=0;el.style.transform+=' translateY(8px)';
-          setTimeout(()=>{el.style.transition='all .8s cubic-bezier(.2,.9,.2,1)';el.style.opacity=1;el.style.transform=el.style.transform.replace(' translateY(8px)','')}, 180*i);
+        document.querySelectorAll('.card, .site-title, .big-btn').forEach((el,i)=>{
+          el.style.opacity=0;el.style.transform+=' translateY(10px)';
+          setTimeout(()=>{el.style.transition='all .8s cubic-bezier(.2,.9,.2,1)';el.style.opacity=1;el.style.transform=el.style.transform.replace(' translateY(10px)','')}, 140*i);
         });
       });
     })();
