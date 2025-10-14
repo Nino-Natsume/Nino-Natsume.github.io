@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>次元星域 — 一个简易的二次元小站</title>
+  <meta name="description" content="次元星域——一个简易的二次元小站">
+  <meta name="author" content="Natsume">
+  <!-- Google Font (optional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & base */
+    :root{
+      --bg1:#0f172a;
+      --bg2:#0b1226;
+      --accent1:#ff7bd2;
+      --accent2:#6a9bff;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+      --text:#eaf2ff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Nunito',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue','PingFang SC',"Hiragino Sans GB","Microsoft Yahei",sans-serif;
+      color:var(--text);
+      background:radial-gradient(1200px 600px at 10% 10%, rgba(106,155,255,0.06), transparent 10%),
+                 radial-gradient(900px 400px at 90% 80%, rgba(255,123,210,0.05), transparent 8%),
+                 linear-gradient(180deg,var(--bg1),var(--bg2));
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow:hidden;
+    }
+
+    /* Page layout */
+    .wrap{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px}
+    .card{
+      width:100%;max-width:1100px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:18px;box-shadow: 0 10px 40px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03);
+      display:grid;grid-template-columns:1fr 1fr;overflow:hidden;position:relative;padding:48px;
+      backdrop-filter: blur(6px);
+    }
+
+    /* Left title */
+    .left{display:flex;flex-direction:column;justify-content:center;padding:24px}
+    .site-title{
+      font-size:clamp(48px,10vw,96px);line-height:0.95;font-weight:800;letter-spacing:2px;
+      background:linear-gradient(90deg,var(--accent1),var(--accent2));
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      text-shadow: 0 6px 30px rgba(106,155,255,0.08);
+      transform-origin:left center;animation:floatTitle 6s ease-in-out infinite;
+    }
+    @keyframes floatTitle{
+      0%{transform:translateY(0) rotate(0.0deg)}
+      50%{transform:translateY(-6px) rotate(-0.2deg)}
+      100%{transform:translateY(0) rotate(0.0deg)}
+    }
+    .subtitle{
+      margin-top:12px;font-size:14px;opacity:0.9;color:rgba(234,242,255,0.75)
+    }
+
+    /* Center separator with animated gradient lines */
+    .separator{display:flex;align-items:center;justify-content:center;position:relative}
+    .separator .lines{
+      width:2px;height:70%;background:linear-gradient(180deg, transparent, rgba(255,255,255,0.06), transparent);
+      position:relative;overflow:visible;border-radius:6px;
+    }
+    /* multiple animated gradient streaks */
+    .lines:before,.lines:after{
+      content:"";position:absolute;left:50%;transform:translateX(-50%);
+      width:6px;height:100%;border-radius:6px;mix-blend-mode:screen;opacity:0.9;
+      background:linear-gradient(180deg,var(--accent1),var(--accent2));
+      animation:slide 4s linear infinite;
+    }
+    .lines:after{width:2px;opacity:0.6;filter:blur(6px);animation-duration:6s}
+    @keyframes slide{0%{transform:translate(-50%, -150%) rotate(0)}50%{transform:translate(-50%, 30%) rotate(0)}100%{transform:translate(-50%, -150%) rotate(0)}}
+
+    /* Right area */
+    .right{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+    .desc{font-size:18px;font-weight:600;margin-bottom:20px;color:rgba(234,242,255,0.95)}
+    .hint{font-size:13px;margin-top:6px;color:rgba(234,242,255,0.6)}
+
+    /* Button */
+    .btn{
+      display:inline-flex;align-items:center;gap:12px;padding:14px 22px;border-radius:12px;font-weight:700;font-size:16px;
+      background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.06);
+      cursor:pointer; color:var(--text);text-decoration:none;box-shadow: 0 6px 30px rgba(106,155,255,0.06);
+      transition:transform .18s ease, box-shadow .18s ease;
+      position:relative;overflow:hidden;
+    }
+    .btn:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(106,155,255,0.12)}
+    .btn .icon{
+      width:22px;height:22px;display:inline-block;flex:0 0 22px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+    }
+    .btn:after{content:"";position:absolute;left:-40%;top:0;width:40%;height:100%;background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.18));transform:skewX(-20deg);opacity:0.0;transition:all .5s}
+    .btn:hover:after{left:120%;opacity:0.9}
+
+    /* Decorative floating stars */
+    .stars{position:absolute;inset:0;pointer-events:none}
+    .star{position:absolute;border-radius:50%;opacity:0.9;mix-blend-mode:screen}
+
+    /* Footer small brand */
+    .brand{position:absolute;left:18px;bottom:18px;font-size:12px;color:rgba(234,242,255,0.5)}
+
+    /* Responsive adjustments */
+    @media (max-width:880px){
+      .card{grid-template-columns:1fr;gap:18px;padding:28px}
+      .separator{display:none}
+      .left{padding-bottom:4px}
+      .right{align-items:flex-start}
+      .site-title{text-align:left}
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="main" aria-labelledby="main-title">
+      <div class="left">
+        <h1 id="main-title" class="site-title">次元星域</h1>
+        <div class="subtitle">次元星域——一个简易的二次元小站</div>
+      </div>
+
+      <div class="separator" aria-hidden="true">
+        <div class="lines" title="分隔线"></div>
+      </div>
+
+      <div class="right">
+        <div class="desc">探索更多？访问我的个人网站：</div>
+        <a class="btn" href="https://natsume.xin" target="_blank" rel="noopener noreferrer" aria-label="前往个人网站">
+          <!-- simple CSS/SVG icon -->
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 2v20M2 12h20" stroke="url(#g)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ff7bd2"/>
+                <stop offset="1" stop-color="#6a9bff"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          个人网站
+        </a>
+        <div class="hint">按钮会在新标签打开目标站点。</div>
+      </div>
+
+      <div class="stars" aria-hidden="true"></div>
+      <div class="brand">© 次元星域</div>
+    </div>
+  </div>
+
+  <script>
+    // Create subtle animated stars using canvas-like divs (no external libs)
+    (function(){
+      const container = document.querySelector('.stars');
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      const count = Math.min(28, Math.floor((W*H)/80000));
+      for(let i=0;i<count;i++){
+        const s = document.createElement('div');
+        s.className='star';
+        const size = Math.random()*6 + 2;
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        const left = Math.random()*100;
+        const top = Math.random()*100;
+        s.style.left = left + '%';
+        s.style.top = top + '%';
+        const c = Math.random()<0.5 ? 'rgba(255,123,210,0.9)' : 'rgba(106,155,255,0.9)';
+        s.style.background = c;
+        s.style.opacity = (Math.random()*0.5 + 0.4).toString();
+        s.style.transform = 'translateZ(0)';
+        s.style.animation = `twinkle ${3 + Math.random()*4}s ease-in-out ${Math.random()*3}s infinite`;
+        container.appendChild(s);
+      }
+      const style = document.createElement('style');
+      style.innerHTML = `@keyframes twinkle{0%{opacity:0.12;transform:scale(0.6)}50%{opacity:1;transform:scale(1)}100%{opacity:0.12;transform:scale(0.6)}}`;
+      document.head.appendChild(style);
+
+      // subtle parallax on mouse move
+      document.addEventListener('mousemove',e=>{
+        const cx = e.clientX / window.innerWidth - 0.5;
+        const cy = e.clientY / window.innerHeight - 0.5;
+        container.style.transform = `translate(${cx*6}px, ${cy*6}px)`;
+      });
+
+      // handle resize: clear and re-create occasionally
+      let resizeTimer;
+      window.addEventListener('resize', ()=>{
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(()=>{
+          while(container.firstChild) container.removeChild(container.firstChild);
+          // recreate
+          const W2 = window.innerWidth;const H2 = window.innerHeight;const count2 = Math.min(36, Math.floor((W2*H2)/90000));
+          for(let i=0;i<count2;i++){
+            const s = document.createElement('div');
+            s.className='star';
+            const size = Math.random()*6 + 2;
+            s.style.width = size + 'px';
+            s.style.height = size + 'px';
+            s.style.left = (Math.random()*100) + '%';
+            s.style.top = (Math.random()*100) + '%';
+            s.style.background = Math.random()<0.5 ? 'rgba(255,123,210,0.9)' : 'rgba(106,155,255,0.9)';
+            s.style.opacity = (Math.random()*0.5 + 0.4).toString();
+            s.style.animation = `twinkle ${3 + Math.random()*4}s ease-in-out ${Math.random()*3}s infinite`;
+            container.appendChild(s);
+          }
+        },250);
+      });
+    })();
+  </script>
+</body>
+</html>
